@@ -1,0 +1,1 @@
+A sticky note extention
