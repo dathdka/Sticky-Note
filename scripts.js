@@ -1,25 +1,28 @@
 window.onload = () => {
-  var status = window.localStorage.getItem("switch");
-  if (!status) {
-    window.localStorage.setItem("switch", "off");
-    status = window.localStorage.getItem("switch");
-  }
-  document.getElementById("checkbox").checked = status === "on" ? true : false;
-  document.getElementsByClassName("text")[0].innerHTML =
-    document.getElementById("checkbox").checked
-      ? `I'm working`
-      : `I'm taking a break`;
+  
+  chrome.storage.sync.get(['status'], function(items) {
+    if (!items.status) {
+      chrome.storage.sync.set({'status': 'off'});
+    }
+    document.getElementById("checkbox").checked = items.status === "on" ? true : false;
+    document.getElementsByClassName("text")[0].innerHTML =
+      document.getElementById("checkbox").checked
+        ? `I'm working`
+        : `I'm taking a break`;
+  });
 };
 document.getElementById("checkbox").addEventListener("click", () => {
   if (!document.getElementById("checkbox").checked) {
     document.getElementsByClassName("text")[0].innerHTML = `I'm taking a break`;
-    window.localStorage.setItem("switch", "off");
+    chrome.storage.sync.set({'status': 'off'});
   } else {
     document.getElementsByClassName("text")[0].innerHTML = `I'm working`;
-    window.localStorage.setItem("switch", "on");
+    chrome.storage.sync.set({'status': 'on'});
   }
 });
 
+
+// send message from popup to content script 
 document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("checkbox")
