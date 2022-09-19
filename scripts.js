@@ -1,10 +1,10 @@
 window.onload = () => {
-  
-  chrome.storage.sync.get(['status'], function(items) {
+  chrome.storage.sync.get(["status"], function (items) {
     if (!items.status) {
-      chrome.storage.sync.set({'status': 'off'});
+      chrome.storage.sync.set({ status: "off" });
     }
-    document.getElementById("checkbox").checked = items.status === "on" ? true : false;
+    document.getElementById("checkbox").checked =
+      items.status === "on" ? true : false;
     document.getElementsByClassName("text")[0].innerHTML =
       document.getElementById("checkbox").checked
         ? `I'm working`
@@ -14,15 +14,15 @@ window.onload = () => {
 document.getElementById("checkbox").addEventListener("click", () => {
   if (!document.getElementById("checkbox").checked) {
     document.getElementsByClassName("text")[0].innerHTML = `I'm taking a break`;
-    chrome.storage.sync.set({'status': 'off'});
+    chrome.storage.sync.set({ status: "off" });
   } else {
     document.getElementsByClassName("text")[0].innerHTML = `I'm working`;
-    chrome.storage.sync.set({'status': 'on'});
+    chrome.storage.sync.set({ status: "on" });
+    // chrome.alarms.create({ periodInMinutes: 1 });
   }
 });
 
-
-// send message from popup to content script 
+// send message from popup to content script
 document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("checkbox")

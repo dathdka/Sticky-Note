@@ -1,1 +1,1 @@
-A sticky, reminder ... note extension
+A sticky note, reminder... extension
