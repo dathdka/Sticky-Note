@@ -9,15 +9,33 @@ window.onload = () => {
       document.getElementById("checkbox").checked
         ? `I'm working`
         : `I'm taking a break`;
+    chrome.storage.sync.get(["note"], function (items) {
+      items.note.forEach((element, index) => {
+        document
+          .getElementById(index)
+          .childNodes[1].addEventListener("click", (e) => {
+            console.log(items.note)
+            items.note.splice(index, 1);
+            console.log(items.note)
+            chrome.storage.sync.set({ note: items.note });
+            const list = document.getElementById("note");
+            list.removeChild(list.children[index]);
+          });
+      });
+    });
   });
   chrome.storage.sync.get(["note"], (items) => {
     var ul = document.getElementById("note");
-    console.log(items.note);
     items.note.forEach((element, index) => {
       var li = document.createElement("li");
       li.id = index;
       li.innerHTML = element;
       li.style.color = "white";
+      var img = document.createElement("img");
+      img.src = "bin.png";
+      img.width = 20;
+      img.height = 20;
+      li.appendChild(img);
       ul.appendChild(li);
     });
   });
@@ -63,16 +81,31 @@ document.getElementById("inputNote").addEventListener("keypress", (e) => {
     var ul = document.getElementById("note");
     chrome.storage.sync.get(["note"], (items) => {
       var li = document.createElement("li");
-      li.id = note.length > 0 ? note.length : 0;
+      li.id = items.note.length > 0 ? items.note.length : 0;
       li.innerHTML = e.target.value;
       li.style.color = "white";
+      var img = document.createElement("img");
+      img.src = "bin.png";
+      img.width = 20;
+      img.height = 20;
+      li.appendChild(img);
       ul.appendChild(li);
-
       if (!items.note) note.push(e.target.value);
       else note = [...items.note, e.target.value];
       chrome.storage.sync.set({ note: note });
+      // add listenner for new element
+   
+      document
+        .getElementById(note.length - 1)
+        .childNodes[1]
+        .addEventListener("click", (e) => {
+          const list = document.getElementById("note");
+          list.removeChild(list.children[note.length-1]);
+          note.pop();
+          chrome.storage.sync.set({ note: note });
+        });
+      e.target.value = ''
+      //
     });
   }
 });
-
-document.getElementById("content").addEventListener("load", () => {});
