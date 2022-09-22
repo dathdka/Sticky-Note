@@ -1,0 +1,8 @@
+
+POST http://localhost:1250/api/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "mail" : "dat@gmail.com",
+    "password" : "123456"
+}

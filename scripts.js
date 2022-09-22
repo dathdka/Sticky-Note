@@ -14,9 +14,9 @@ window.onload = () => {
         document
           .getElementById(index)
           .childNodes[1].addEventListener("click", (e) => {
-            console.log(items.note)
+            console.log(items.note);
             items.note.splice(index, 1);
-            console.log(items.note)
+            console.log(items.note);
             chrome.storage.sync.set({ note: items.note });
             const list = document.getElementById("note");
             list.removeChild(list.children[index]);
@@ -94,18 +94,83 @@ document.getElementById("inputNote").addEventListener("keypress", (e) => {
       else note = [...items.note, e.target.value];
       chrome.storage.sync.set({ note: note });
       // add listenner for new element
-   
+
       document
         .getElementById(note.length - 1)
-        .childNodes[1]
-        .addEventListener("click", (e) => {
+        .childNodes[1].addEventListener("click", (e) => {
           const list = document.getElementById("note");
-          list.removeChild(list.children[note.length-1]);
+          list.removeChild(list.children[note.length - 1]);
           note.pop();
           chrome.storage.sync.set({ note: note });
         });
-      e.target.value = ''
+      e.target.value = "";
       //
     });
   }
+});
+
+chrome.storage.sync.get(['userDetails'], (items)=>{
+  if(items.userDetails){
+    document.getElementById('login').setAttribute('hidden','');
+    document.getElementById('logout').removeAttribute('hidden');
+  }
+})
+
+document.getElementById("loginButton").addEventListener("click", () => {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "http://localhost:1250/api/auth/login", true);
+  xhttp.setRequestHeader("content-type", "application/json");
+  var email = document.getElementById("email");
+  var password = document.getElementById("password");
+  xhttp.send(
+    JSON.stringify({
+      mail: email.value,
+      password: password.value,
+    })
+  );
+  xhttp.onload = () => {
+    if (xhttp.status === 200) {
+      alert("success");
+      chrome.storage.sync.set({
+        userDetails: JSON.parse(xhttp.response).userDetails,
+      });
+      document.getElementById("login").setAttribute("hidden", "");
+      document.getElementById("logout").removeAttribute("hidden");
+      chrome.storage.sync.get(["userDetails"], (items) => {
+        console.log(items.userDetails);
+      });
+    } else alert("fail");
+  };
+});
+
+document.getElementById("logoutButton").addEventListener("click", () => {
+  document.getElementById("logout").setAttribute("hidden", "");
+  document.getElementById("login").removeAttribute("hidden");
+  chrome.storage.sync.set({userDetails : ''})
+  document.getElementById("loginButton").addEventListener("click", () => {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:1250/api/auth/login", true);
+    xhttp.setRequestHeader("content-type", "application/json");
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+    xhttp.send(
+      JSON.stringify({
+        mail: email.value,
+        password: password.value,
+      })
+    );
+    xhttp.onload = () => {
+      if (xhttp.status === 200) {
+        alert("success");
+        chrome.storage.sync.set({
+          userDetails: JSON.parse(xhttp.response).userDetails,
+        });
+        document.getElementById("login").setAttribute("hidden", "");
+        document.getElementById("logout").removeAttribute("hidden");
+        chrome.storage.sync.get(["userDetails"], (items) => {
+          console.log(items.userDetails);
+        });
+      } else alert("fail");
+    };
+  });
 });

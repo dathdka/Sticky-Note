@@ -14,14 +14,26 @@
 
     <div class="switchWrapper">
         <label class="switch">
-            <input type="checkbox" id="checkbox" >
+            <input type="checkbox" id="checkbox">
             <span class="slider round"></span>
         </label>
     </div>
     <div class="text">I'm taking a break</div>
     <input type="text" placeholder="add a note" id="inputNote">
-    <label>Notes</label>
-    <ul id="note"></ul>
+    <div>
+        <label class="text">Notes</label>
+        <ul id="note"></ul>
+    </div>
+    <div id="chat">
+        <div id="login">
+            <input placeholder="email" type="text" id="email"/>
+            <input placeholder="password" type="password" id="password" />
+            <input type="button" value="login" id='loginButton' />
+        </div>
+        <div id="logout" hidden>
+            <input type="button" value="logout" id="logoutButton"/>
+        </div>
+    </div>
     <script src="scripts.js"></script>
 </body>
 
