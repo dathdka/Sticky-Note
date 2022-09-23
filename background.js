@@ -9,9 +9,10 @@
 //   });
 // });
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if(message.closeThis) chrome.tabs.remove(sender.tab.id);
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.closeThis) chrome.tabs.remove(sender.tab.id);
 });
+
 
 // chrome.alarms.onAlarm.addListener(() => {
 //   chrome.notifications.create({

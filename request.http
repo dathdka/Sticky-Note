@@ -6,3 +6,11 @@ content-type: application/json
     "mail" : "dat@gmail.com",
     "password" : "123456"
 }
+
+###
+POST  http://localhost:1250/api/message/get-message HTTP/1.1
+content-Type: application/json
+
+{
+    "id" : "62eaa07fe5819614f3e3c19d"
+}

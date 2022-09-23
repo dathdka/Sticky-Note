@@ -51,6 +51,17 @@ document.getElementById("checkbox").addEventListener("click", () => {
   }
 });
 
+chrome.runtime.onMessage.addListener(function (
+  message,
+  messageSender,
+  sendResponse
+) {
+  // message is the message you sent, probably an object
+  // messageSender is an object that contains info about the context that sent the message
+  // sendResponse is a function to run when you have a response
+  alert(message);
+});
+
 // send message from popup to content script
 document.addEventListener("DOMContentLoaded", function () {
   document
@@ -109,12 +120,12 @@ document.getElementById("inputNote").addEventListener("keypress", (e) => {
   }
 });
 
-chrome.storage.sync.get(['userDetails'], (items)=>{
-  if(items.userDetails){
-    document.getElementById('login').setAttribute('hidden','');
-    document.getElementById('logout').removeAttribute('hidden');
+chrome.storage.sync.get(["userDetails"], (items) => {
+  if (items.userDetails) {
+    document.getElementById("login").setAttribute("hidden", "");
+    document.getElementById("logout").removeAttribute("hidden");
   }
-})
+});
 
 document.getElementById("loginButton").addEventListener("click", () => {
   const xhttp = new XMLHttpRequest();
@@ -130,23 +141,38 @@ document.getElementById("loginButton").addEventListener("click", () => {
   );
   xhttp.onload = () => {
     if (xhttp.status === 200) {
-      alert("success");
       chrome.storage.sync.set({
         userDetails: JSON.parse(xhttp.response).userDetails,
       });
       document.getElementById("login").setAttribute("hidden", "");
       document.getElementById("logout").removeAttribute("hidden");
       chrome.storage.sync.get(["userDetails"], (items) => {
-        console.log(items.userDetails);
+        var getMessage = new XMLHttpRequest();
+        getMessage.open(
+          "POST",
+          "http://localhost:1250/api/message/get-message",
+          true
+        );
+        getMessage.setRequestHeader("content-type", "application/json");
+        getMessage.send(JSON.stringify({ id: items.userDetails._id }));
+        getMessage.onload = () => {
+          if (getMessage.status === 200) {
+            var res = JSON.parse(getMessage.response);
+            chrome.storage.sync.set({ message: res.data });
+            chrome.storage.sync.get(["message"], (items) => {
+              console.log(items);
+            });
+          }
+        };
       });
-    } else alert("fail");
+    } else alert("login fail");
   };
 });
 
 document.getElementById("logoutButton").addEventListener("click", () => {
   document.getElementById("logout").setAttribute("hidden", "");
   document.getElementById("login").removeAttribute("hidden");
-  chrome.storage.sync.set({userDetails : ''})
+  chrome.storage.sync.set({ userDetails: "" });
   document.getElementById("loginButton").addEventListener("click", () => {
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:1250/api/auth/login", true);
@@ -161,16 +187,60 @@ document.getElementById("logoutButton").addEventListener("click", () => {
     );
     xhttp.onload = () => {
       if (xhttp.status === 200) {
-        alert("success");
         chrome.storage.sync.set({
           userDetails: JSON.parse(xhttp.response).userDetails,
         });
         document.getElementById("login").setAttribute("hidden", "");
         document.getElementById("logout").removeAttribute("hidden");
         chrome.storage.sync.get(["userDetails"], (items) => {
-          console.log(items.userDetails);
+          const getMessage = new XMLHttpRequest();
+          getMessage.open(
+            "POST",
+            "http://localhost:1250/api/message/get-message",
+            true
+          );
+          getMessage.setRequestHeader("content-type", "application/json");
+          getMessage.send(JSON.stringify({ id: items.userDetails._id }));
+          getMessage.onload = () => {
+            if (getMessage.status === 200) {
+              var res = JSON.parse(getMessage.response);
+              chrome.storage.sync.set({ message: res.data });
+              chrome.storage.sync.get(["message"], (items) => {
+                console.log(items);
+              });
+            }
+          };
         });
-      } else alert("fail");
+      } else alert("login fail");
     };
   });
 });
+
+setInterval(() => {
+  chrome.storage.sync.get(["userDetails"], (items) => {
+    if (items.userDetails) {
+      const getMessage = new XMLHttpRequest();
+      getMessage.open(
+        "POST",
+        "http://localhost:1250/api/message/get-message",
+        true
+      );
+      getMessage.setRequestHeader("content-type", "application/json");
+      getMessage.send(JSON.stringify({ id: items.userDetails._id }));
+      getMessage.onload = () => {
+        if (getMessage.status === 200) {
+          var notification = [];
+          chrome.storage.sync.get(["message"], (items) => {
+            var listMessage = JSON.parse(getMessage.response);
+            listMessage.data.forEach((f, index) => {
+              if (f.messages != items.message.at(index).messages){
+                notification.push(f.username);
+              }
+            });
+          });
+          console.log(notification);
+        }
+      };
+    }
+  });
+}, 5000);
