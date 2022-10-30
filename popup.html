@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./public/style.css">
     <title>Sticky note</title>
 
 </head>
@@ -21,22 +21,27 @@
     <div class="text">Break</div>
     <input type="text" placeholder="add a note" id="inputNote">
     <div>
-        <label class="text">Notes</label>
-        <ul id="note"></ul>
-    </div>
-    <div id="chat">
-        <div id="login">
-            <input placeholder="email" type="text" id="email"/>
-            <input placeholder="password" type="password" id="password" />
-            <input type="button" value="login" id='loginButton' />
+        <div id="notes">
+            <label class="text">Notes</label>
+            <ul id="note"></ul>
         </div>
-        <div id="logout" hidden>
-            <label class="text" >Notification</label>
-            <ul style="color: white;" id="notification"></ul>
-            <input type="button" value="logout" id="logoutButton"/>
+        <div id="chat" >
+            <div id="login">
+                <input placeholder="email" type="text" id="email"/>
+                <input placeholder="password" type="password" id="password" />
+                <input type="button" value="login" id='loginButton' />
+            </div>
+            <div id="logout" hidden>
+                <label class="text" >Notification</label>
+                <ul style="color: white;" id="notification"></ul>
+                <input type="button" value="logout" id="logoutButton"/>
+            </div>
         </div>
     </div>
-    <script src="scripts.js"></script>
+    <script src="./popupScript.js/onloadEvent.js"></script>
+    <script src="./popupScript.js/authentication.js"></script>
+    <script src="./popupScript.js/addingNote.js"></script>
+    <script src="./popupScript.js//reminder.js"></script>
 </body>
 
 </html>
