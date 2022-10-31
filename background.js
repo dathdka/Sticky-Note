@@ -1,4 +1,3 @@
-
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.closeThis) chrome.tabs.remove(sender.tab.id);
 });
@@ -22,24 +21,31 @@ setInterval(() => {
           return data.json();
         })
         .then((listMessage) => {
-          // console.log(response.data)
-          chrome.storage.sync.get(["message"], async (items) =>  {
-            var notification =[] ;
-            await listMessage.data.forEach((f, index) => {
-              if (f.messages != items.message.data.at(index).messages) {
-                notification.push(f.username);
+          chrome.storage.sync.get(["message"], async (items) => {
+            if(items.message.length > 0){
+              var notification = [];
+              //check if new message exsist or new message from new friend
+              await listMessage.data.forEach((f, index) => {
+                if(items.message.at(index)){
+                  if (f.messages != items.message.at(index).messages) {
+                    console.log(f);
+                    notification.push(f);
+                  }
+                }else
+                  notification.push(f)  
+              });
+              
+              //display notification if there is new messages in array
+              if (notification.length > 0) {
+                chrome.action.setBadgeText({ text: "N" });
+                chrome.storage.sync.set({ unReadMessage: notification });
               }
-            });
-            if (notification.length > 0){
+            }else{
+              chrome.storage.sync.set({unReadMessage : listMessage.data})
               chrome.action.setBadgeText({ text: "N" });
-              // console.log(notification)
-              chrome.storage.sync.set({newMessage : notification})
-            } 
+            }
           });
         });
     }
   });
 }, 5000);
-
-
-

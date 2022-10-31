@@ -1,11 +1,12 @@
 .content {
-    width: 300px;
-    background: radial-gradient(circle, rgba(159, 21, 151, 1) 0%, rgba(112, 27, 189, 1) 31%, rgba(3, 2, 10, 1) 100%);
+    width: 400px;
+    background-color: #333399;
+    /* background: radial-gradient(circle, rgba(159, 21, 151, 1) 0%, rgba(112, 27, 189, 1) 31%, rgba(3, 2, 10, 1) 100%); */
 }
 
 .text {
     font-size: 40px;
-    color: white;
+    color: black;
     text-align: center;
     margin-top: 40px;
 }

@@ -14,21 +14,27 @@ document.getElementById("inputNote").addEventListener("keypress", (e) => {
       img.src = "../public/bin.png";
       img.width = 20;
       img.height = 20;
-      li.appendChild(img);
-      ul.appendChild(li);
       if (!items.note) note.push(e.target.value);
       else note = [...items.note, e.target.value];
+      img.onclick = (e) =>{
+        const list = document.getElementById("note");
+          list.removeChild(list.children[note.length-1]);
+          note.splice(note.length-1, 1);
+          chrome.storage.sync.set({ note: note });
+      }
+      li.appendChild(img);
+      ul.appendChild(li);
       chrome.storage.sync.set({ note: note });
       
       // add listenner for new element
-      document
-        .getElementById(note.length - 1)
-        .childNodes[1].addEventListener("click", (e) => {
-          const list = document.getElementById("note");
-          list.removeChild(list.children[note.length]);
-          note.pop();
-          chrome.storage.sync.set({ note: note });
-        });
+      // document
+      //   .getElementById(note.length - 1)
+      //   .childNodes[1].addEventListener("click", (e) => {
+      //     const list = document.getElementById("note");
+      //     list.removeChild(list.children[note.length]);
+      //     note.pop();
+      //     chrome.storage.sync.set({ note: note });
+      //   });
       e.target.value = "";
       //
     });
