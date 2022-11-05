@@ -51,6 +51,7 @@ document.getElementById("logoutButton").addEventListener("click", () => {
     document.getElementById("logout").setAttribute("hidden", "");
     document.getElementById("login").removeAttribute("hidden");
     chrome.storage.sync.set({ userDetails: "" });
+    chrome.storage.sync.set({message: ''})
     document.getElementById("loginButton").addEventListener("click", () => {
       const xhttp = new XMLHttpRequest();
       xhttp.open("POST", "http://localhost:1250/api/auth/login", true);

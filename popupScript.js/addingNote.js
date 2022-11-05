@@ -25,16 +25,6 @@ document.getElementById("inputNote").addEventListener("keypress", (e) => {
       li.appendChild(img);
       ul.appendChild(li);
       chrome.storage.sync.set({ note: note });
-      
-      // add listenner for new element
-      // document
-      //   .getElementById(note.length - 1)
-      //   .childNodes[1].addEventListener("click", (e) => {
-      //     const list = document.getElementById("note");
-      //     list.removeChild(list.children[note.length]);
-      //     note.pop();
-      //     chrome.storage.sync.set({ note: note });
-      //   });
       e.target.value = "";
       //
     });

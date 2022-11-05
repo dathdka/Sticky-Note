@@ -36,10 +36,10 @@ function stop() {
 var counter;
 const doJob = () => {
   counter = 0;
-  var timer = 1000;
+  var timer = 10000;
   interval = setInterval(() => {
     counter += 1;
-    alert("working mode is ON!!!");
-    if (counter === 3) chrome.runtime.sendMessage({ closeThis: true });
+    alert("you're on working mode!");
+    if (counter === 1) chrome.runtime.sendMessage({ closeThis: true });
   }, timer);
 };
