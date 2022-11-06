@@ -18,7 +18,14 @@ window.onload = () => {
         newNotifi.innerHTML += `You got new message from ${messageFromUsers} !`;
         // remove all unread messages if user click
         newNotifi.onclick = (e) => {
-          window.open("http://localhost:3000/dashboard");
+          const body = document.getElementById('content')
+          body.style.width = `750px`
+          body.style.height = `600px`
+          var frame = document.getElementById('frame')
+          frame.removeAttribute('hidden')
+          frame.width = `740px`
+          frame.height = `400px`
+          frame.setAttribute('src',"http://localhost:3000/dashboard")
           chrome.storage.sync.set({ message: items.unReadMessage });
           chrome.action.setBadgeText({ text: "" });
           chrome.storage.sync.set({unReadMessage : ''})

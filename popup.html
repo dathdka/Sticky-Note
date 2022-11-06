@@ -11,7 +11,6 @@
 </head>
 
 <body class="content" id="content">
-
     <div class="switchWrapper">
         <label class="switch">
             <input type="checkbox" id="checkbox">
@@ -19,12 +18,12 @@
         </label>
     </div>
     <div class="text">Break</div>
-    <input type="text" placeholder="add a note" id="inputNote">
     <div>
-        <div id="notes">
+        <input type="text" placeholder="add a note" id="inputNote">
+        <details id="notes" title="Notes">
             <label class="text">Notes</label>
             <ul id="note"></ul>
-        </div>
+        </details>
         <div id="chat" >
             <div id="login">
                 <input placeholder="email" type="text" id="email"/>
@@ -36,6 +35,7 @@
                 <ul style="color: white;" id="notification"></ul>
                 <input type="button" value="logout" id="logoutButton"/>
             </div>
+            <iframe id="frame" src="" hidden ></iframe>
         </div>
     </div>
     <script src="./popupScript.js/onloadEvent.js"></script>
